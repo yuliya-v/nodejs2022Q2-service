@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-export const handleNonExistentUser = () => {
-  throw new HttpException("User doesn't exist", HttpStatus.NOT_FOUND);
+export const handleNonExistentItem = (item: 'User' | 'Track') => {
+  throw new HttpException(`${item} doesn't exist`, HttpStatus.NOT_FOUND);
 };
 
 export const handleInvalidPassword = () => {

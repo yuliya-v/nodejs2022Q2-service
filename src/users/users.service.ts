@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import {
   handleInvalidPassword,
-  handleNonExistentUser,
+  handleNonExistentItem,
 } from 'src/utils/error-handlers';
 import {
   validateCreateUserDto,
   validateUpdatePasswordDto,
-  validateUserId,
+  validateUuid,
 } from 'src/utils/validators';
 
 import { usersModel } from './db/users.model';
@@ -22,9 +22,9 @@ export class UsersService {
   }
 
   async findOne(id: string) {
-    validateUserId(id);
+    validateUuid(id);
     const user = await this.db.findByID(id);
-    if (!user) handleNonExistentUser();
+    if (!user) handleNonExistentItem('User');
     return user;
   }
 
@@ -34,19 +34,19 @@ export class UsersService {
   }
 
   async update(id: string, userDto: UpdatePasswordDto) {
-    validateUserId(id);
+    validateUuid(id);
     validateUpdatePasswordDto(userDto);
     const user = await this.db.findByID(id);
-    if (!user) handleNonExistentUser();
+    if (!user) handleNonExistentItem('User');
     const isPasswordCorrect = await this.db.checkPasswordValidity(id, userDto);
     if (!isPasswordCorrect) handleInvalidPassword();
     return this.db.update(id, userDto);
   }
 
   async remove(id: string) {
-    validateUserId(id);
+    validateUuid(id);
     const user = await this.db.findByID(id);
-    if (!user) handleNonExistentUser();
+    if (!user) handleNonExistentItem('User');
     return this.db.delete(id);
   }
 }
