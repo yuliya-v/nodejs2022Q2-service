@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import {
   handleInvalidPassword,
   handleNonExistentItem,
-} from 'src/utils/error-handlers';
+} from 'src/common/utils/error-handlers';
 import {
   validateCreateUserDto,
   validateUpdatePasswordDto,
   validateUuid,
-} from 'src/utils/validators';
+} from 'src/common/utils/validators';
 
 import { usersModel } from './db/users.model';
 import { CreateUserDto } from './dto/create-user.dto';

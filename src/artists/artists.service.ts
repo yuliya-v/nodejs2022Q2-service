@@ -1,24 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { handleNonExistentItem } from 'src/common/utils/error-handlers';
-import {
-  validateCreateTrackDto,
-  validateUuid,
-} from 'src/common/utils/validators';
-
-import { CreateTrackDto } from './dto/create-track.dto';
-import { UpdateTrackDto } from './dto/update-track.dto';
-import { tracksModel } from './tracks.model';
+import { validateArtistDto, validateUuid } from 'src/common/utils/validators';
+import { artistsModel } from './artists.model';
+import { CreateArtistDto } from './dto/create-artist.dto';
+import { UpdateArtistDto } from './dto/update-artist.dto';
 
 @Injectable()
-export class TracksService {
-  private db = tracksModel;
+export class ArtistsService {
+  private db = artistsModel;
 
   async findAll() {
     return this.db.findAll();
   }
-  async create(createTrackDto: CreateTrackDto) {
-    validateCreateTrackDto(createTrackDto);
-    return this.db.create(createTrackDto);
+  async create(createArtistDto: CreateArtistDto) {
+    validateArtistDto(createArtistDto);
+    return this.db.create(createArtistDto);
   }
 
   async findOne(id: string) {
@@ -28,12 +24,12 @@ export class TracksService {
     return track;
   }
 
-  async update(id: string, updateTrackDto: UpdateTrackDto) {
+  async update(id: string, updateArtistDto: UpdateArtistDto) {
     validateUuid(id);
-    validateCreateTrackDto(updateTrackDto);
+    validateArtistDto(updateArtistDto);
     const track = await this.db.findByID(id);
     if (!track) handleNonExistentItem('Track');
-    return this.db.update(id, updateTrackDto);
+    return this.db.update(id, updateArtistDto);
   }
 
   async remove(id: string) {

@@ -1,4 +1,6 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { CreateArtistDto } from 'src/artists/dto/create-artist.dto';
+import { UpdateArtistDto } from 'src/artists/dto/update-artist.dto';
 import { CreateTrackDto } from 'src/tracks/dto/create-track.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UpdatePasswordDto } from 'src/users/dto/update-password.dto';
@@ -11,6 +13,15 @@ export const validateUuid = (id: string) => {
 
 export const validateCreateUserDto = (body: CreateUserDto) => {
   if (typeof body.login !== 'string' || typeof body.password !== 'string') {
+    throw new HttpException(
+      'Body does not contain required fields',
+      HttpStatus.BAD_REQUEST,
+    );
+  }
+};
+
+export const validateArtistDto = (body: CreateArtistDto | UpdateArtistDto) => {
+  if (typeof body.grammy !== 'boolean' || typeof body.name !== 'string') {
     throw new HttpException(
       'Body does not contain required fields',
       HttpStatus.BAD_REQUEST,
