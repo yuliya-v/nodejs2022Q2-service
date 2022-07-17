@@ -4,6 +4,7 @@ import {
   validateCreateTrackDto,
   validateUuid,
 } from 'src/common/utils/validators';
+import { favoritesModel } from 'src/favorites/favorites.model';
 
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
@@ -12,6 +13,7 @@ import { tracksModel } from './tracks.model';
 @Injectable()
 export class TracksService {
   private db = tracksModel;
+  private favorites = favoritesModel;
 
   async findAll() {
     return this.db.findAll();
@@ -21,9 +23,14 @@ export class TracksService {
     return this.db.create(createTrackDto);
   }
 
+  async findById(id: string) {
+    const track = await this.db.findByID(id);
+    return track;
+  }
+
   async findOne(id: string) {
     validateUuid(id);
-    const track = await this.db.findByID(id);
+    const track = await this.findById(id);
     if (!track) handleNonExistentItem('Track');
     return track;
   }
@@ -40,6 +47,7 @@ export class TracksService {
     validateUuid(id);
     const track = await this.db.findByID(id);
     if (!track) handleNonExistentItem('Track');
+    await this.favorites.removeTrack(id);
     return this.db.delete(id);
   }
 }
