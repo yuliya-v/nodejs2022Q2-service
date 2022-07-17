@@ -16,6 +16,22 @@ class TracksModel extends DataBase<Track> {
     });
     return trackToUpdate;
   }
+
+  public async removeAlbumId(id: string) {
+    this.data.forEach((item) => {
+      if (item.albumId === id) {
+        item.albumId = null;
+      }
+    });
+  }
+
+  public async removeArtistId(id: string) {
+    this.data.forEach((item) => {
+      if (item.artistId === id) {
+        item.artistId = null;
+      }
+    });
+  }
 }
 
 export const tracksModel = new TracksModel();

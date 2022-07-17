@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { CreateAlbumDto } from 'src/albums/dto/create-album.dto';
 import { CreateArtistDto } from 'src/artists/dto/create-artist.dto';
 import { UpdateArtistDto } from 'src/artists/dto/update-artist.dto';
 import { CreateTrackDto } from 'src/tracks/dto/create-track.dto';
@@ -35,6 +36,19 @@ export const validateCreateTrackDto = (body: CreateTrackDto) => {
     typeof body.duration !== 'number' ||
     !('artistId' in body) ||
     !('albumId' in body)
+  ) {
+    throw new HttpException(
+      'Body does not contain required fields',
+      HttpStatus.BAD_REQUEST,
+    );
+  }
+};
+
+export const validateAlbumDto = (body: CreateAlbumDto) => {
+  if (
+    typeof body.name !== 'string' ||
+    typeof body.year !== 'number' ||
+    !('artistId' in body)
   ) {
     throw new HttpException(
       'Body does not contain required fields',

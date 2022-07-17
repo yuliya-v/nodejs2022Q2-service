@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { handleNonExistentItem } from 'src/common/utils/error-handlers';
 import { validateArtistDto, validateUuid } from 'src/common/utils/validators';
+import { tracksModel } from 'src/tracks/tracks.model';
 import { artistsModel } from './artists.model';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
@@ -8,6 +9,7 @@ import { UpdateArtistDto } from './dto/update-artist.dto';
 @Injectable()
 export class ArtistsService {
   private db = artistsModel;
+  private tracks = tracksModel;
 
   async findAll() {
     return this.db.findAll();
@@ -36,6 +38,8 @@ export class ArtistsService {
     validateUuid(id);
     const track = await this.db.findByID(id);
     if (!track) handleNonExistentItem('Track');
+    await this.tracks.removeAlbumId(id);
+    await this.tracks.removeArtistId(id);
     return this.db.delete(id);
   }
 }
